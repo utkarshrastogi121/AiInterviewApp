@@ -10,6 +10,7 @@ import {MainLayout} from "./layouts/main-layout.tsx"
 import { Generate } from "./components/generate.tsx"
 import { Dashboard } from "./routes/dashboard.tsx"
 import { CreateEditPage } from "./routes/create-edit-page.tsx"
+import { MockLoadPage } from "./routes/mock-load-page.tsx"
 
 
 function App() {
@@ -36,6 +37,7 @@ function App() {
           <Route element={<Generate/>} path="/generate">
             <Route index element={<Dashboard/>}></Route>
             <Route path=":interviewId" element={<CreateEditPage/>}></Route>
+            <Route path="interview/:interviewId" element={<MockLoadPage/>}></Route>
           </Route>
         </Route>
 
