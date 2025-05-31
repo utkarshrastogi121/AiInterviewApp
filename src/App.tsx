@@ -7,6 +7,10 @@ import { SignInPage } from "./routes/sign-in.tsx"
 import { SignUpPage } from "./routes/sign-up.tsx"
 import ProtectRoutes from "./layouts/protected-routes.tsx"
 import {MainLayout} from "./layouts/main-layout.tsx"
+import { Generate } from "./components/generate.tsx"
+import { Dashboard } from "./routes/dashboard.tsx"
+import { CreateEditPage } from "./routes/create-edit-page.tsx"
+
 
 function App() {
   return (
@@ -22,12 +26,17 @@ function App() {
         <Route element={<AuthenticationLayout/>}>
           <Route path="/signin" element={<SignInPage/>} />
           <Route path="/signup" element={<SignUpPage/>} />
+          
 
         </Route>
 
         {/* protected routes */}
         <Route element={<ProtectRoutes><MainLayout/></ProtectRoutes>}>
         
+          <Route element={<Generate/>} path="/generate">
+            <Route index element={<Dashboard/>}></Route>
+            <Route path=":interviewId" element={<CreateEditPage/>}></Route>
+          </Route>
         </Route>
 
       </Routes>
@@ -36,3 +45,5 @@ function App() {
 }
 
 export default App
+
+// 2:06:00
