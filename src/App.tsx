@@ -12,6 +12,7 @@ import { Dashboard } from "./routes/dashboard.tsx"
 import { CreateEditPage } from "./routes/create-edit-page.tsx"
 import { MockLoadPage } from "./routes/mock-load-page.tsx"
 import { MockInterviewPage } from "./routes/mock-interview-page.tsx"
+import { Feedback } from "./routes/feedback.tsx"
 
 
 function App() {
@@ -28,7 +29,6 @@ function App() {
         <Route element={<AuthenticationLayout/>}>
           <Route path="/signin" element={<SignInPage/>} />
           <Route path="/signup" element={<SignUpPage/>} />
-          
 
         </Route>
 
@@ -39,7 +39,8 @@ function App() {
             <Route index element={<Dashboard/>}></Route>
             <Route path=":interviewId" element={<CreateEditPage/>}></Route>
             <Route path="interview/:interviewId" element={<MockLoadPage/>}></Route>
-            <Route path="interview/:interviewId" element={<MockInterviewPage/>}></Route>
+            <Route path="interview/:interviewId/start" element={<MockInterviewPage/>}></Route>
+            <Route path="feedback/:interviewId" element={<Feedback/>}></Route>
           </Route>
         </Route>
 
@@ -49,5 +50,3 @@ function App() {
 }
 
 export default App
-
-// 2:06:00
