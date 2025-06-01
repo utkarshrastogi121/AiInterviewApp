@@ -1,4 +1,3 @@
-// import { Button } from "@/components/ui/button"
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
 import PublicLayout from "./layouts/public-layout.tsx"
 import AuthenticationLayout from './layouts/auth-layout.tsx'
