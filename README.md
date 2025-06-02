@@ -45,17 +45,6 @@ Clone the repository and set up the project locally.
 ```bash
 git clone https://github.com/utkarshrastogi121/AiInterviewApp.git
 cd AiInterviewApp
-
-
-## 🔧 Getting Started
-
-Follow these steps to set up and run the project locally.
-
-### 1. Clone the Repository
-
-```bash
-git clone https://github.com/utkarshrastogi121/AiInterviewApp.git
-cd AiInterviewApp
 ```
 
 ### 2.Install Dependencies
