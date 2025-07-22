@@ -17,7 +17,7 @@ Welcome to **AI Interview App**, your intelligent companion to mastering job int
 - ✍️ **Role-specific Inputs**  
   Tailor mock interviews by specifying job role, experience, and technology.
 
-- 📊 **Performance Insights** *(coming soon)*  
+- 📊 **Performance Insights**
   Get AI-driven feedback after interviews to improve over time.
 
 ---
