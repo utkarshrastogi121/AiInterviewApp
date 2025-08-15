@@ -12,6 +12,7 @@ import { CreateEditPage } from "./routes/create-edit-page.tsx"
 import { MockLoadPage } from "./routes/mock-load-page.tsx"
 import { MockInterviewPage } from "./routes/mock-interview-page.tsx"
 import { Feedback } from "./routes/feedback.tsx"
+import ContactForm from "./components/contact.tsx"
 
 
 function App() {
@@ -22,6 +23,7 @@ function App() {
 
         <Route element={<PublicLayout/>}>
           <Route index element={<HomePage/>} />
+          <Route path="/contact" element={<ContactForm/>}/>
         </Route>
 
         {/* authentication layout */}
