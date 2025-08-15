@@ -58,10 +58,6 @@ const HomePage = () => {
             <p className="text-sm text-neutral-500">
               Get instant feedback and tailored questions to sharpen your coding, communication, and problem-solving skills. Practice with realistic scenarios and track your progress as you prepare for your next big opportunity.
             </p>
-
-            <Button className="mt-3">
-              Generate <Sparkles />
-            </Button>
           </div>
         </div>
       </Container>
