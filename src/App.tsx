@@ -14,6 +14,7 @@ import { MockInterviewPage } from "./routes/mock-interview-page.tsx"
 import { Feedback } from "./routes/feedback.tsx"
 import ContactForm from "./components/contact.tsx"
 import About from "./components/about.tsx"
+import Services from "./components/services.tsx"
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
           <Route index element={<HomePage/>} />
           <Route path="/contact" element={<ContactForm/>}/>
           <Route path="/about" element={<About />} />
+          <Route path="/services" element={<Services />} />
         </Route>
 
         {/* authentication layout */}
