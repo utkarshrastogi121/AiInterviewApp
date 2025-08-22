@@ -6,6 +6,7 @@ import { NavigationRoutes } from "./navigation-routes.tsx";
 import { NavLink } from "react-router-dom";
 import { ProfileContainer } from "./profile-container.tsx";
 import { ToggleContainer } from "./toggle-container.tsx";
+import ThemeToggle from "./themeToggle.tsx";
 
 const Header = () => {
   const { userId } = useAuth();
@@ -27,8 +28,8 @@ const Header = () => {
                 to={"/generate"}
                 className={({ isActive }) =>
                   cn(
-                    "text-base text-neutral-600",
-                    isActive && "text-neutral-900 font-semibold"
+                    "text-base text-gray-600",
+                    isActive && "text-gray-300 font-semibold"
                   )
                 }
               >
@@ -38,6 +39,9 @@ const Header = () => {
           </nav>
 
           <div className="ml-auto flex items-center gap-6">
+
+            {/* dark-light mode */}
+            <ThemeToggle />
             {/* profile section */}
             <ProfileContainer />
 
