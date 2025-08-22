@@ -27,13 +27,13 @@ const HomePage = () => {
         </div>
 
         <div className="flex w-full items-center justify-evenly md:px-12 md:py-16 md:items-center md:justify-end gap-12">
-          <p className="text-3xl font-semibold text-gray-900 text-center">
+          <p className="text-3xl font-semibold text-gray-600 text-center">
             250k+
             <span className="block text-xl text-muted-foreground font-normal">
               Offers Recieved
             </span>
           </p>
-          <p className="text-3xl font-semibold text-gray-900 text-center">
+          <p className="text-3xl font-semibold text-gray-600 text-center">
             1.2M+
             <span className="block text-xl text-muted-foreground font-normal">
               Interview Aced
@@ -63,7 +63,7 @@ const HomePage = () => {
       </Container>
 
       <Container className="py-8 space-y-8">
-        <h2 className="tracking-wide text-xl text-gray-800 font-semibold">
+        <h2 className="tracking-wide text-xl text-gray-600 font-semibold">
           Unleash your potential with personalized AI insights and targeted
           interview practice.
         </h2>
