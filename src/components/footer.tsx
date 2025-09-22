@@ -95,7 +95,7 @@ export const Footer = () => {
                 hoverColor="text-blue-500"
               />
               <SocialLink
-                href="https://twitter.com"
+                href="https://x.com/utkarshr1201"
                 icon={<Twitter size={24} />}
                 hoverColor="text-blue-400"
               />
