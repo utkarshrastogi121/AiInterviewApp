@@ -5,12 +5,13 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "build": "tsc -b && vite build --silent",
     "lint": "eslint .",
     "preview": "vite preview"
   },
   "dependencies": {
     "@clerk/clerk-react": "^5.31.4",
+    "@emailjs/browser": "^4.4.1",
     "@google/genai": "^1.39.0",
     "@heroicons/react": "^2.2.0",
     "@hookform/resolvers": "^5.0.1",
@@ -23,7 +24,6 @@
     "@radix-ui/react-tooltip": "^1.2.7",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
-    "emailjs-com": "^3.2.0",
     "firebase": "^11.8.1",
     "lucide-react": "^0.511.0",
     "mime": "^4.0.7",
