@@ -22,7 +22,7 @@ import {
 } from "./ui/form";
 import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
-import { chatSession } from "@/scripts";
+import { sendMessage } from "@/scripts";
 import {
   addDoc,
   collection,
@@ -108,8 +108,11 @@ export const FormMockInterview = ({ initialData }: FormMockInterviewProps) => {
         The questions should assess skills in ${data?.techStack} development and best practices, problem-solving, and experience handling complex requirements. Please format the output strictly as an array of JSON objects without any additional labels, code blocks, or explanations. Return only the JSON array with questions and answers.
         `;
 
-    const aiResult = await chatSession.sendMessage(prompt);
-    const cleanedResponse = cleanAiResponse(aiResult.response.text());
+    const aiText = await sendMessage(prompt);
+    if (!aiText) {
+      throw new Error("Failed to generate AI response");
+    }
+    const cleanedResponse = cleanAiResponse(aiText);
 
     return cleanedResponse;
   };
