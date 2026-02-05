@@ -9,14 +9,12 @@ import {
   VideoOff,
   WebcamIcon,
 } from "lucide-react";
-import { useEffect, useState } from "react";
-import useSpeechToText from "react-hook-speech-to-text";
-import type { ResultType } from "react-hook-speech-to-text";
+import { useEffect, useRef, useState } from "react";
+import useSpeechToText, { type ResultType } from "react-hook-speech-to-text";
 import { useParams } from "react-router-dom";
 import WebCam from "react-webcam";
 import { TooltipButton } from "./tooltip-button";
 import { toast } from "sonner";
-import { chatSession } from "@/scripts";
 import { SaveModal } from "./save-modal";
 import {
   addDoc,
@@ -27,6 +25,7 @@ import {
   where,
 } from "firebase/firestore";
 import { db } from "@/config/firebase.config";
+import { evaluateAnswer } from "@/scripts/ai";
 
 interface RecordAnswerProps {
   question: { question: string; answer: string };
@@ -56,153 +55,123 @@ export const RecordAnswer = ({
   });
 
   const [userAnswer, setUserAnswer] = useState("");
-  const [isAiGenerating, setIsAiGenerating] = useState(false);
   const [aiResult, setAiResult] = useState<AIResponse | null>(null);
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [isAiGenerating, setIsAiGenerating] = useState(false);
 
+  const resultsRef = useRef<ResultType[]>([]);
   const { userId } = useAuth();
   const { interviewId } = useParams();
 
-  const recordUserAnswer = async () => {
-    if (isRecording) {
-      stopSpeechToText();
-
-      if (userAnswer?.length < 30) {
-        toast.error("Error", {
-          description: "Your answer should be more than 30 characters",
-        });
-
-        return;
-      }
-
-      const aiResult = await generateResult(
-        question.question,
-        question.answer,
-        userAnswer
-      );
-
-      setAiResult(aiResult);
-    } else {
-      startSpeechToText();
-    }
-  };
-
-  const cleanJsonResponse = (responseText: string) => {
-    let cleanText = responseText.trim();
-
-    cleanText = cleanText.replace(/(json|```|`)/g, "");
-
+  // 🎯 Generate evaluation from backend
+  const generateResult = async (): Promise<void> => {
     try {
-      return JSON.parse(cleanText);
-    } catch (error) {
-      throw new Error("Invalid JSON format: " + (error as Error)?.message);
-    }
-  };
+      setIsAiGenerating(true);
 
-  const generateResult = async (
-    qst: string,
-    qstAns: string,
-    userAns: string
-  ): Promise<AIResponse> => {
-    setIsAiGenerating(true);
-    const prompt = `
-      Question: "${qst}"
-      User Answer: "${userAns}"
-      Correct Answer: "${qstAns}"
-      Please compare the user's answer to the correct answer, and provide a rating (from 1 to 10) based on answer quality, and offer feedback for improvement.
-      Return the result in JSON format with the fields "ratings" (number) and "feedback" (string).
-    `;
-
-    try {
-      const aiResult = await chatSession.sendMessage(prompt);
-
-      const parsedResult: AIResponse = cleanJsonResponse(
-        aiResult.response.text()
-      );
-      return parsedResult;
-    } catch (error) {
-      console.log(error);
-      toast("Error", {
-        description: "An error occurred while generating feedback.",
+      const result = await evaluateAnswer({
+        question: question.question,
+        correctAnswer: question.answer,
+        userAnswer,
       });
-      return { ratings: 0, feedback: "Unable to generate feedback" };
+
+      setAiResult(result);
+    } catch {
+      toast.error("AI Error", {
+        description: "Failed to evaluate your answer",
+      });
+      setAiResult({
+        ratings: 0,
+        feedback: "Evaluation failed. Please try again.",
+      });
     } finally {
       setIsAiGenerating(false);
     }
   };
 
-  const recordNewAnswer = () => {
-    setUserAnswer("");
+  const recordUserAnswer = async () => {
+    if (!isRecording) {
+      resultsRef.current = [];
+      setUserAnswer("");
+      setAiResult(null);
+      startSpeechToText();
+      return;
+    }
+
     stopSpeechToText();
+
+    if (userAnswer.trim().length < 30) {
+      toast.error("Answer too short", {
+        description: "Minimum 30 characters required",
+      });
+      return;
+    }
+
+    await generateResult();
+  };
+
+  const recordNewAnswer = () => {
+    stopSpeechToText();
+    resultsRef.current = [];
+    setUserAnswer("");
+    setAiResult(null);
     startSpeechToText();
   };
 
   const saveUserAnswer = async () => {
+    if (!aiResult || !userId) return;
+
     setLoading(true);
 
-    if (!aiResult) {
-      return;
-    }
-
-    const currentQuestion = question.question;
     try {
-
-      const userAnswerQuery = query(
+      const q = query(
         collection(db, "userAnswers"),
         where("userId", "==", userId),
-        where("question", "==", currentQuestion)
+        where("question", "==", question.question)
       );
 
-      const querySnap = await getDocs(userAnswerQuery);
+      const snapshot = await getDocs(q);
 
-      if (!querySnap.empty) {
-        console.log("Query Snap Size", querySnap.size);
-        toast.info("Already Answered", {
-          description: "You have already answered this question",
-        });
+      if (!snapshot.empty) {
+        toast.info("Already Answered");
         return;
-      } else {
-
-        await addDoc(collection(db, "userAnswers"), {
-          mockIdRef: interviewId,
-          question: question.question,
-          correct_ans: question.answer,
-          user_ans: userAnswer,
-          feedback: aiResult.feedback,
-          rating: aiResult.ratings,
-          userId,
-          createdAt: serverTimestamp(),
-        });
-
-        toast("Saved", { description: "Your answer has been saved.." });
       }
 
-      setUserAnswer("");
-      stopSpeechToText();
-    } catch (error) {
-      toast("Error", {
-        description: "An error occurred while generating feedback.",
+      await addDoc(collection(db, "userAnswers"), {
+        mockIdRef: interviewId,
+        question: question.question,
+        correct_ans: question.answer,
+        user_ans: userAnswer,
+        feedback: aiResult.feedback,
+        rating: aiResult.ratings,
+        userId,
+        createdAt: serverTimestamp(),
       });
-      console.log(error);
+
+      toast.success("Saved successfully");
+      setOpen(false);
+      setUserAnswer("");
+      setAiResult(null);
+    } catch {
+      toast.error("Save failed");
     } finally {
       setLoading(false);
-      setOpen(!open);
     }
   };
 
   useEffect(() => {
-    const combineTranscripts = results
-      .filter((result): result is ResultType => typeof result !== "string")
-      .map((result) => result.transcript)
-      .join(" ");
+    const validResults = results.filter(
+      (r): r is ResultType => typeof r !== "string"
+    );
 
-    setUserAnswer(combineTranscripts);
+    resultsRef.current = validResults;
+
+    const transcript = validResults.map((r) => r.transcript).join(" ");
+    setUserAnswer(transcript);
   }, [results]);
 
   return (
     <div className="w-full flex flex-col items-center gap-8 mt-4">
-      {/* save modal */}
       <SaveModal
         isOpen={open}
         onClose={() => setOpen(false)}
@@ -210,75 +179,64 @@ export const RecordAnswer = ({
         loading={loading}
       />
 
-      <div className="w-full h-[400px] md:w-96 flex flex-col items-center justify-center border p-4 bg-gray-50 rounded-md">
+      <div className="w-full h-[400px] md:w-96 border bg-gray-50 rounded-md flex items-center justify-center">
         {isWebCam ? (
-          <WebCam
-            onUserMedia={() => setIsWebCam(true)}
-            onUserMediaError={() => setIsWebCam(false)}
-            className="w-full h-full object-cover rounded-md"
-          />
+          <WebCam className="w-full h-full rounded-md object-cover" />
         ) : (
-          <WebcamIcon className="min-w-24 min-h-24 text-muted-foreground" />
+          <WebcamIcon className="w-24 h-24 text-muted-foreground" />
         )}
       </div>
 
-      <div className="flex itece justify-center gap-3">
+      <div className="flex justify-center gap-3">
         <TooltipButton
           content={isWebCam ? "Turn Off" : "Turn On"}
-          icon={
-            isWebCam ? (
-              <VideoOff className="min-w-5 min-h-5" />
-            ) : (
-              <Video className="min-w-5 min-h-5" />
-            )
-          }
+          icon={isWebCam ? <VideoOff /> : <Video />}
           onClick={() => setIsWebCam(!isWebCam)}
         />
 
         <TooltipButton
           content={isRecording ? "Stop Recording" : "Start Recording"}
-          icon={
-            isRecording ? (
-              <CircleStop className="min-w-5 min-h-5" />
-            ) : (
-              <Mic className="min-w-5 min-h-5" />
-            )
-          }
+          icon={isRecording ? <CircleStop /> : <Mic />}
           onClick={recordUserAnswer}
         />
 
         <TooltipButton
           content="Record Again"
-          icon={<RefreshCw className="min-w-5 min-h-5" />}
+          icon={<RefreshCw />}
           onClick={recordNewAnswer}
         />
 
         <TooltipButton
           content="Save Result"
           icon={
-            isAiGenerating ? (
-              <Loader className="min-w-5 min-h-5 animate-spin" />
-            ) : (
-              <Save className="min-w-5 min-h-5" />
-            )
+            isAiGenerating ? <Loader className="animate-spin" /> : <Save />
           }
-          onClick={() => setOpen(!open)}
-          disbaled={!aiResult}
+          onClick={() => !isAiGenerating && setOpen(true)}
+          disabled={!aiResult || isAiGenerating}
         />
       </div>
 
-      <div className="w-full mt-4 p-4 border rounded-md bg-gray-50">
-        <h2 className="text-lg font-semibold">Your Answer:</h2>
-
-        <p className="text-sm mt-2 text-gray-700 whitespace-normal">
-          {userAnswer || "Start recording to see your answer here"}
+      <div className="w-full p-4 border rounded-md bg-gray-50">
+        <h2 className="font-semibold">Your Answer</h2>
+        <p className="mt-2 text-sm text-gray-700">
+          {userAnswer || "Start recording..."}
         </p>
 
         {interimResult && (
-          <p className="text-sm text-gray-500 mt-2">
-            <strong>Current Speech:</strong>
-            {interimResult}
+          <p className="text-xs text-gray-500 mt-2">
+            <strong>Current:</strong> {interimResult}
           </p>
+        )}
+
+        {aiResult && (
+          <div className="mt-4 text-sm">
+            <p>
+              <strong>Rating:</strong> {aiResult.ratings}/10
+            </p>
+            <p className="mt-1">
+              <strong>Feedback:</strong> {aiResult.feedback}
+            </p>
+          </div>
         )}
       </div>
     </div>

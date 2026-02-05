@@ -49,10 +49,6 @@ const HomePage = () => {
             className="w-full h-full object-cover"
           />
 
-          <div className="absolute top-4 left-4 px-4 py-2 rounded-md bg-white/40 backdrop-blur-md">
-            Inteviews Copilot&copy;
-          </div>
-
           <div className="hidden md:block absolute w-80 bottom-4 right-4 px-4 py-2 rounded-md bg-white/60 backdrop-blur-md">
             <h2 className="text-neutral-800 font-semibold">Developer</h2>
             <p className="text-sm text-neutral-500">

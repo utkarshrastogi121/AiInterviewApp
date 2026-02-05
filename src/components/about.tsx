@@ -38,7 +38,7 @@ const About: React.FC = () => {
       </ul>
 
       <p className="text-lg leading-relaxed">
-        With AI Interview App, you’re not just practicing — you’re preparing smarter. 
+        With AI Interview App, you're not just practicing — you're preparing smarter. 
         Let AI guide you towards your career goals.
       </p>
     </div>
