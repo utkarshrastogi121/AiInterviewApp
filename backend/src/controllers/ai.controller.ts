@@ -5,7 +5,6 @@ import {
 } from "../services/gemini.service";
 
 export const generateQuestions = async (req: Request, res: Response) => {
-  console.log("🔥 generate-questions HIT", req.body);
 
   try {
     const questions = await generateQuestionsAI(req.body);

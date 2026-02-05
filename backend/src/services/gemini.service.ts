@@ -4,14 +4,11 @@ if (!process.env.GEMINI_API_KEY) {
   throw new Error("GEMINI_API_KEY is missing in environment variables");
 }
 
-// log safely (optional)
-console.log("Gemini API key loaded:", process.env.GEMINI_API_KEY.slice(0, 5) + "...");
 
 const ai = new GoogleGenAI({
   apiKey: process.env.GEMINI_API_KEY,
 });
 
-// ---------- Helpers ----------
 const cleanJson = (text: string) => {
   const cleaned = text.replace(/```json|```/g, "").trim();
   const match = cleaned.match(/(\{[\s\S]*\}|\[[\s\S]*\])/);
@@ -19,7 +16,6 @@ const cleanJson = (text: string) => {
   return JSON.parse(match[0]);
 };
 
-// ---------- 1. Generate Questions ----------
 export const generateQuestionsAI = async (data: {
   position: string;
   description: string;
@@ -51,7 +47,6 @@ No markdown. No explanation.
   return cleanJson(res.text!);
 };
 
-// ---------- 2. Evaluate Answer ----------
 export const evaluateAnswerAI = async (data: {
   question: string;
   correctAnswer: string;
