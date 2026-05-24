@@ -90,11 +90,6 @@ export const Footer = () => {
             <h3 className="font-bold text-lg mb-4">Contact Us</h3>
             <div className="flex gap-4">
               <SocialLink
-                href="https://facebook.com"
-                icon={<Facebook size={24} />}
-                hoverColor="text-blue-500"
-              />
-              <SocialLink
                 href="https://x.com/utkarshr1201"
                 icon={<Twitter size={24} />}
                 hoverColor="text-blue-400"
