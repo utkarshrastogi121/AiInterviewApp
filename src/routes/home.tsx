@@ -44,7 +44,7 @@ const HomePage = () => {
         {/* image section */}
         <div className="w-full mt-4 rounded-xl bg-gray-100 h-[420px] drop-shadow-md overflow-hidden relative">
           <img
-            src="/assets/img/hero.jpg"
+            src="/assets/img/hero.webp"
             alt=""
             className="w-full h-full object-cover"
           />
@@ -67,7 +67,7 @@ const HomePage = () => {
         <div className="grid grid-cols-1 md:grid-cols-5 gap-3">
           <div className="col-span-1 md:col-span-3">
             <img
-              src="/assets/img/office.jpg"
+              src="/assets/img/office.webp"
               alt=""
               className="w-full max-h-96 rounded-md object-cover"
             />
