@@ -64,7 +64,6 @@ export const RecordAnswer = ({
   const { userId } = useAuth();
   const { interviewId } = useParams();
 
-  // 🎯 Generate evaluation from backend
   const generateResult = async (): Promise<void> => {
     try {
       setIsAiGenerating(true);
