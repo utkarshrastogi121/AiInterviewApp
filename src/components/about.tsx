@@ -10,104 +10,146 @@ import {
   Sparkles,
 } from "lucide-react";
 
+const features = [
+  {
+    icon: <Brain className="w-6 h-6 text-purple-600 dark:text-purple-400" />,
+    title: "AI-powered Interview Generation",
+    description:
+      "Generate personalized mock interviews based on your role, experience, job description, and technology stack.",
+  },
+  {
+    icon: (
+      <LayoutDashboard className="w-6 h-6 text-green-600 dark:text-green-400" />
+    ),
+    title: "Interview Dashboard",
+    description:
+      "Manage, organize, and revisit all your mock interviews from one place.",
+  },
+  {
+    icon: <FileText className="w-6 h-6 text-yellow-600 dark:text-yellow-400" />,
+    title: "Role-specific Interviews",
+    description:
+      "Customize interviews for different companies, roles, and technologies.",
+  },
+  {
+    icon: (
+      <BarChart3 className="w-6 h-6 text-cyan-600 dark:text-cyan-400" />
+    ),
+    title: "Performance Insights",
+    description:
+      "Receive AI-powered feedback highlighting strengths and areas for improvement.",
+  },
+];
+
+const useCases = [
+  {
+    icon: <Briefcase className="w-6 h-6 text-blue-600 dark:text-blue-400" />,
+    title: "Prepare for Placements",
+    description:
+      "Practice realistic interviews before your campus or off-campus interviews.",
+  },
+  {
+    icon: <Target className="w-6 h-6 text-red-600 dark:text-red-400" />,
+    title: "Build Confidence",
+    description:
+      "Improve your communication and interview skills through regular practice.",
+  },
+  {
+    icon: (
+      <TrendingUp className="w-6 h-6 text-emerald-600 dark:text-emerald-400" />
+    ),
+    title: "Track Improvement",
+    description:
+      "Monitor your progress and identify weak areas with AI-generated insights.",
+  },
+];
+
 const About: React.FC = () => {
   return (
-    <div className="max-w-5xl mx-auto px-6 py-12 text-white">
-      <h1 className="text-4xl font-bold mb-6 text-center">
-        About AI Interview App
-      </h1>
+    <section className="max-w-5xl mx-auto px-6 py-12">
+      {/* Header */}
+      <div className="text-center mb-12">
+        <h1 className="text-4xl font-bold text-gray-900 dark:text-white">
+          About AI Interview App
+        </h1>
 
-      <p className="text-lg leading-relaxed mb-6">
-        <strong>AI Interview App</strong> is your intelligent companion to
-        mastering job interviews. Our platform empowers you to simulate
-        realistic mock interviews tailored to your job role, experience level,
-        and tech stack — all powered by AI insights. Whether you're a fresher
-        or an experienced professional, AI Interview App helps you prepare,
-        improve, and boost your confidence before the big day.
-      </p>
-
-      <div className="flex items-center gap-2 mb-4">
-        <Sparkles className="w-6 h-6 text-blue-400" />
-        <h2 className="text-2xl font-semibold">Key Features</h2>
+        <p className="mt-5 max-w-3xl mx-auto text-lg text-gray-600 dark:text-gray-300 leading-relaxed">
+          <span className="font-semibold">AI Interview App</span> is your
+          intelligent companion for mastering technical and HR interviews.
+          Practice realistic AI-generated mock interviews tailored to your job
+          role, experience level, and technology stack while receiving detailed
+          feedback to improve with every session.
+        </p>
       </div>
 
-      <ul className="space-y-4 mb-8">
-        <li className="flex items-start gap-3">
-          <Brain className="w-5 h-5 text-purple-400 mt-1 flex-shrink-0" />
-          <span>
-            <strong>AI-powered Interview Generation</strong> – Personalized
-            interviews based on your role, description, experience, and
-            technology stack.
-          </span>
-        </li>
-
-        <li className="flex items-start gap-3">
-          <LayoutDashboard className="w-5 h-5 text-green-400 mt-1 flex-shrink-0" />
-          <span>
-            <strong>Dashboard for Interview Management</strong> – Keep track of
-            all your mock interviews in one place.
-          </span>
-        </li>
-
-        <li className="flex items-start gap-3">
-          <FileText className="w-5 h-5 text-yellow-400 mt-1 flex-shrink-0" />
-          <span>
-            <strong>Role-specific Inputs</strong> – Customize your interview by
-            specifying job role, experience, and tech stack.
-          </span>
-        </li>
-
-        <li className="flex items-start gap-3">
-          <BarChart3 className="w-5 h-5 text-cyan-400 mt-1 flex-shrink-0" />
-          <span>
-            <strong>Performance Insights</strong> – Get AI-driven feedback to
-            identify strengths and areas for improvement.
-          </span>
-        </li>
-      </ul>
-
-      <div className="flex items-center gap-2 mb-4">
-        <Target className="w-6 h-6 text-orange-400" />
-        <h2 className="text-2xl font-semibold">Use Cases</h2>
+      {/* Features */}
+      <div className="flex items-center gap-2 mb-8">
+        <Sparkles className="w-7 h-7 text-indigo-600 dark:text-indigo-400" />
+        <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
+          Key Features
+        </h2>
       </div>
 
-      <ul className="space-y-4 mb-8">
-        <li className="flex items-start gap-3">
-          <Briefcase className="w-5 h-5 text-blue-400 mt-1 flex-shrink-0" />
-          <span>
-            Prepare for your dream job interviews with realistic AI
-            simulations.
-          </span>
-        </li>
+      <div className="grid gap-6 md:grid-cols-2 mb-14">
+        {features.map((feature, index) => (
+          <div
+            key={index}
+            className="bg-white dark:bg-gray-900 rounded-2xl shadow-md p-6 transition duration-300 hover:-translate-y-2 hover:shadow-xl"
+          >
+            <div className="mb-4">{feature.icon}</div>
 
-        <li className="flex items-start gap-3">
-          <Target className="w-5 h-5 text-red-400 mt-1 flex-shrink-0" />
-          <span>
-            Gain confidence through repeated practice in a stress-free
-            environment.
-          </span>
-        </li>
+            <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
+              {feature.title}
+            </h3>
 
-        <li className="flex items-start gap-3">
-          <TrendingUp className="w-5 h-5 text-emerald-400 mt-1 flex-shrink-0" />
-          <span>
-            Identify weak areas and work on them with AI-generated suggestions.
-          </span>
-        </li>
+            <p className="mt-2 text-gray-600 dark:text-gray-300">
+              {feature.description}
+            </p>
+          </div>
+        ))}
+      </div>
 
-        <li className="flex items-start gap-3">
-          <FileText className="w-5 h-5 text-violet-400 mt-1 flex-shrink-0" />
-          <span>
-            Use role-specific interviews for different job applications.
-          </span>
-        </li>
-      </ul>
+      {/* Use Cases */}
+      <div className="flex items-center gap-2 mb-8">
+        <Target className="w-7 h-7 text-orange-600 dark:text-orange-400" />
+        <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
+          Use Cases
+        </h2>
+      </div>
 
-      <p className="text-lg leading-relaxed">
-        With AI Interview App, you're not just practicing — you're preparing
-        smarter. Let AI guide you towards your career goals.
-      </p>
-    </div>
+      <div className="grid gap-6 md:grid-cols-3 mb-14">
+        {useCases.map((item, index) => (
+          <div
+            key={index}
+            className="bg-white dark:bg-gray-900 rounded-2xl shadow-md p-6 transition duration-300 hover:-translate-y-2 hover:shadow-xl"
+          >
+            <div className="mb-4">{item.icon}</div>
+
+            <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
+              {item.title}
+            </h3>
+
+            <p className="mt-2 text-gray-600 dark:text-gray-300">
+              {item.description}
+            </p>
+          </div>
+        ))}
+      </div>
+
+      {/* Footer */}
+      <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-md p-8 text-center">
+        <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+          Practice Smarter with AI
+        </h2>
+
+        <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
+          Whether you're preparing for campus placements, internships, or
+          experienced software engineering roles, AI Interview App helps you
+          build confidence, sharpen your interview skills, and maximize your
+          chances of success through personalized AI-driven practice.
+        </p>
+      </div>
+    </section>
   );
 };
 
